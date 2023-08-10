@@ -22,6 +22,11 @@ type Request struct {
 	}
 }
 
+func (r *Request) SetUrl(url string) *Request {
+	r.Url = url
+	return r
+}
+
 func (r *Request) SetSoapEnv(env string) *Request {
 	r.SoapEnv = env
 	return r
