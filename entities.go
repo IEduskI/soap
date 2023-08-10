@@ -13,8 +13,8 @@ type ServiceRequest struct {
 }
 
 type Body struct {
-	Text string `xml:",chardata"`
-	RequestBody
+	Text    string `xml:",chardata"`
+	Content RequestBody
 }
 
 type RequestBody struct {
