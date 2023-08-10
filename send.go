@@ -28,7 +28,7 @@ func (r *Response) StatusCode() int {
 	return r.RawResponse.StatusCode
 }
 
-func (r *Request) Send( (*Response, error) {
+func (r *Request) Send() (*Response, error) {
 
 	//Build the request
 	err := r.build()
