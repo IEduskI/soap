@@ -13,13 +13,13 @@ type ServiceRequest struct {
 }
 
 type Body struct {
-	Text        string `xml:",chardata"`
-	XMLName     xml.Name
-	RequestBody `xml:"content,omitempty"`
+	Text string `xml:",chardata"`
+	RequestBody
 }
 
 type RequestBody struct {
 	Text        string `xml:",chardata"`
+	XMLName     xml.Name
 	RequestBody string `xml:",innerxml"`
 }
 
