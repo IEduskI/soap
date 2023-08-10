@@ -72,8 +72,8 @@ func (r *Request) build() error {
 	serviceReq.SoapEnv = r.SoapEnv
 	serviceReq.Type = r.SoapType
 	serviceReq.Header = r.generateSecurityHeader()
-	serviceReq.Body.RequestBody.XMLName.Local = r.BodyType
-	serviceReq.Body.RequestBody.RequestBody = r.BodyContent
+	serviceReq.Body.Content.XMLName.Local = r.BodyType
+	serviceReq.Body.Content.RequestBody = r.BodyContent
 
 	respXML, err := xml.Marshal(serviceReq)
 	if err != nil {
