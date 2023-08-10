@@ -9,7 +9,7 @@ import (
 )
 
 // generateSecurityHeader Set the values in the security structure.
-func generateSecurityHeader(usr, pass string, ttl int64) Security {
+func (r *Request) generateSecurityHeader() Security {
 	// Generate a random nonce
 	nonce := generateNonce()
 
@@ -17,9 +17,9 @@ func generateSecurityHeader(usr, pass string, ttl int64) Security {
 	created := time.Now().UTC().Format(time.RFC3339)
 
 	// Concatenate the nonce, created timestamp, and password
-	passwordDigest := generatePasswordDigest(string(nonce), created, pass)
+	passwordDigest := generatePasswordDigest(string(nonce), created, r.SecurityHeader.Password)
 
-	expirationDuration := time.Duration(ttl) * time.Minute
+	expirationDuration := time.Duration(r.SecurityHeader.TimeToLive) * time.Minute
 
 	expiration := time.Now().UTC().Add(expirationDuration).Format(time.RFC3339)
 
@@ -36,7 +36,7 @@ func generateSecurityHeader(usr, pass string, ttl int64) Security {
 		UsernameToken: UsernameToken{
 			ID:       "UsernameToken-20914066",
 			Wsu:      "http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd",
-			Username: usr,
+			Username: r.SecurityHeader.UserName,
 			Password: Password{
 				Type:           "http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordDigest",
 				PasswordDigest: passwordDigest,

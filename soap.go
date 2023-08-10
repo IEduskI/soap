@@ -1,15 +1,7 @@
 package soap
 
-import "context"
+import "net/http"
 
-type Soap interface {
-	Build(ctx context.Context, request Request) ([]byte, error)
-	Send(ctx context.Context, request []byte) ([]byte, int, error)
-}
-
-type iflyRequest struct {
-}
-
-func NewIflyRequest() *iflyRequest {
-	return &iflyRequest{}
+func New() *Client {
+	return NewClient(&http.Client{})
 }

@@ -69,7 +69,7 @@ type ContentResponse struct {
 	} `xml:"Body"`
 }
 
-type Response struct {
+type XmlResponse struct {
 	XMLName xml.Name `xml:"soapenv:Envelope"`
 	Text    string   `xml:",chardata"`
 	SoapEnv string   `xml:"xmlns:soapenv,attr"`

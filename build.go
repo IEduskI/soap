@@ -3,16 +3,19 @@ package soap
 import (
 	"encoding/xml"
 	"fmt"
+	"net/http"
 )
 
 type Request struct {
-	Url         string
-	SoapAction  string
-	SoapEnv     string
-	SoapType    string
-	BodyType    string
-	BodyContent string
-	Header      struct {
+	Url            string
+	Header         http.Header
+	client         *Client
+	SoapEnv        string
+	SoapType       string
+	BodyType       string
+	BodyContent    string
+	payloadRequest []byte
+	SecurityHeader struct {
 		UserName   string
 		Password   string
 		TimeToLive int64
@@ -39,33 +42,39 @@ func (r *Request) SetBodyContent(content string) *Request {
 	return r
 }
 
-func (r *Request) SetHeader(usr, pass string, ttl ...int64) *Request {
+func (r *Request) SetHeader(header, value string) *Request {
+	r.Header.Set(header, value)
+	return r
+}
 
-	r.Header.UserName = usr
-	r.Header.Password = pass
+func (r *Request) SetSecurityHeader(usr, pass string, ttl ...int64) *Request {
+
+	r.SecurityHeader.UserName = usr
+	r.SecurityHeader.Password = pass
 
 	switch {
 	case len(ttl) > 0:
-		r.Header.TimeToLive = ttl[0]
+		r.SecurityHeader.TimeToLive = ttl[0]
 	default:
-		r.Header.TimeToLive = 5
+		r.SecurityHeader.TimeToLive = 5
 	}
 	return r
 }
 
-func (s *iflyRequest) build(req *Request) ([]byte, error) {
+func (r *Request) build() error {
 	serviceReq := ServiceRequest{}
 
-	serviceReq.SoapEnv = req.SoapEnv
-	serviceReq.Type = req.SoapType
-	serviceReq.Header = generateSecurityHeader(req.Header.UserName, req.Header.Password, req.Header.TimeToLive)
-	serviceReq.Body.XMLName.Local = req.BodyType
-	serviceReq.Body.RequestBody.RequestBody = req.BodyContent
+	serviceReq.SoapEnv = r.SoapEnv
+	serviceReq.Type = r.SoapType
+	serviceReq.Header = r.generateSecurityHeader()
+	serviceReq.Body.XMLName.Local = r.BodyType
+	serviceReq.Body.RequestBody.RequestBody = r.BodyContent
 
 	respXML, err := xml.Marshal(serviceReq)
 	if err != nil {
-		return nil, fmt.Errorf("failed to marshal XML: %w", err)
+		return fmt.Errorf("failed to marshal XML: %w", err)
 	}
+	r.payloadRequest = respXML
 
-	return respXML, nil
+	return nil
 }
