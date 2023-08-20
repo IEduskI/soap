@@ -1,4 +1,4 @@
-package soap
+package xmlsvcwrapper
 
 import (
 	"net"
@@ -11,6 +11,11 @@ type Client struct {
 	httpClient *http.Client
 }
 
+// New function creates a new client http instance
+func New() *Client {
+	return NewClient(&http.Client{})
+}
+
 func NewClient(c *http.Client) *Client {
 	if c.Transport == nil {
 		c.Transport = createTransport(nil)
@@ -20,13 +25,17 @@ func NewClient(c *http.Client) *Client {
 	}
 }
 
-func (c *Client) Request() *Request {
+// R function creates a new request instance
+func (c *Client) R() *Request {
 	return &Request{
 		client: c,
 		Header: http.Header{},
 	}
 }
 
+// SetTimeOut method sets timeout for request raised from client.
+//
+//	client.SetTimeout(time.Duration(1 * time.Second))
 func (c *Client) SetTimeOut(timeout time.Duration) *Client {
 	c.httpClient.Timeout = timeout
 	return c
