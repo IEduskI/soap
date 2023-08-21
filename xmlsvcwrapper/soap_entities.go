@@ -1,8 +1,8 @@
-package soap
+package xmlsvcwrapper
 
 import "encoding/xml"
 
-// Struct for service request
+// ServiceRequest is the structure for service request
 type ServiceRequest struct {
 	XMLName xml.Name `xml:"soapenv:Envelope"`
 	Text    string   `xml:",chardata"`
@@ -23,7 +23,7 @@ type RequestBody struct {
 	RequestBody string `xml:",innerxml"`
 }
 
-// Security Header
+// Security is the structure for the security header
 type Security struct {
 	Text   string `xml:",chardata"`
 	Header Header `xml:"wsse:Security"`
@@ -61,7 +61,7 @@ type Timestamp struct {
 	Expires string   `xml:"wsu:Expires"`
 }
 
-// Response
+// ContentResponse saving the response content
 type ContentResponse struct {
 	Body struct {
 		Text    string `xml:",chardata"`
@@ -69,6 +69,7 @@ type ContentResponse struct {
 	} `xml:"Body"`
 }
 
+// XmlResponse structure with the correct response format
 type XmlResponse struct {
 	XMLName xml.Name `xml:"soapenv:Envelope"`
 	Text    string   `xml:",chardata"`

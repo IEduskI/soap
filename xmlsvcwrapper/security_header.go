@@ -1,4 +1,4 @@
-package soap
+package xmlsvcwrapper
 
 import (
 	"crypto/rand"

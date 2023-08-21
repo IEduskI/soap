@@ -1,40 +1,15 @@
-package soap
+package xmlsvcwrapper
 
 import (
 	"bytes"
 	"encoding/xml"
-	"io/ioutil"
+	"io"
 	"log"
 	"net/http"
 )
 
-type Response struct {
-	Request         *Request
-	RawResponse     *http.Response
-	payloadResponse []byte
-}
-
-func (r *Response) PayloadResponse() []byte {
-	if r.RawResponse == nil {
-		return []byte{}
-	}
-	return r.payloadResponse
-}
-
-func (r *Response) StatusCode() int {
-	if r.RawResponse == nil {
-		return 0
-	}
-	return r.RawResponse.StatusCode
-}
-
-func (r *Request) Send() (*Response, error) {
-
-	//Build the request
-	err := r.build()
-	if err != nil {
-		return nil, err
-	}
+// send function execute the http request with the provided information from Request instance
+func (r *Request) send() (*Response, error) {
 
 	req, err := http.NewRequest(http.MethodPost, r.Url, bytes.NewReader(r.payloadRequest))
 	if err != nil {
@@ -58,7 +33,7 @@ func (r *Request) Send() (*Response, error) {
 		RawResponse: resp,
 	}
 
-	rawResp, err := ioutil.ReadAll(resp.Body)
+	rawResp, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return nil, err
 	}
