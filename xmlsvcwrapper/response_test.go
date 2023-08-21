@@ -118,6 +118,13 @@ func TestResponse_StatusCode(t *testing.T) {
 	}
 	test2Fields.RawResponse.StatusCode = http.StatusInternalServerError
 
+	//3. Test nil RawResponse
+	test3Fields := fields{
+		Request:         testRequest,
+		RawResponse:     nil,
+		payloadResponse: []byte(textResponse),
+	}
+
 	tests := []struct {
 		name   string
 		fields fields
@@ -132,6 +139,11 @@ func TestResponse_StatusCode(t *testing.T) {
 			name:   "Test Retrieve StatusCode 500",
 			fields: test2Fields,
 			want:   http.StatusInternalServerError,
+		},
+		{
+			name:   "Test no response",
+			fields: test3Fields,
+			want:   0,
 		},
 	}
 	for _, tt := range tests {

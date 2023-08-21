@@ -32,7 +32,7 @@ func TestRequest_build(t *testing.T) {
 		Header:      headers,
 		client:      client,
 		SoapEnv:     "http://schemas.xmlsoap.org/soap/envelope/",
-		SoapType:    "http://www.ibsplc.com/iloyal/member/memberprofiledetail/type/",
+		SoapType:    "http://www.example.com/soap/member/detail/type/",
 		BodyType:    "type:example",
 		BodyContent: "Hello world!",
 		SecurityHeader: struct {

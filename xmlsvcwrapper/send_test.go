@@ -1,7 +1,6 @@
 package xmlsvcwrapper
 
 import (
-	"encoding/xml"
 	"net/http"
 	"reflect"
 	"testing"
@@ -128,47 +127,4 @@ func createMockWebService() {
 		w.Write([]byte(response))
 	})
 	http.ListenAndServe(":3000", mux)
-}
-
-type MockRequest struct {
-	XMLName xml.Name `xml:"Envelope"`
-	Text    string   `xml:",chardata"`
-	Soapenv string   `xml:"soapenv,attr"`
-	Header  string   `xml:"Header"`
-	Body    struct {
-		Text    string `xml:",chardata"`
-		Request struct {
-			Text   string `xml:",chardata"`
-			String string `xml:"string"`
-		} `xml:"Request"`
-	} `xml:"Body"`
-}
-
-type MockResponse struct {
-	XMLName xml.Name `xml:"Envelope"`
-	Text    string   `xml:",chardata"`
-	Soapenv string   `xml:"soapenv,attr"`
-	Header  string   `xml:"Header"`
-	Body    struct {
-		Text     string `xml:",chardata"`
-		Response struct {
-			Text   string `xml:",chardata"`
-			String string `xml:"string"`
-		} `xml:"Response"`
-	} `xml:"Body"`
-}
-
-type MockFault struct {
-	XMLName xml.Name `xml:"Envelope"`
-	Text    string   `xml:",chardata"`
-	Soap    string   `xml:"soap,attr"`
-	Body    struct {
-		Text  string `xml:",chardata"`
-		Fault struct {
-			Text        string `xml:",chardata"`
-			Faultcode   string `xml:"faultcode"`
-			Faultstring string `xml:"faultstring"`
-			Detail      string `xml:"detail"`
-		} `xml:"Fault"`
-	} `xml:"Body"`
 }

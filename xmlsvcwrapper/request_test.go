@@ -264,6 +264,12 @@ func TestRequest_SetSecurityHeader(t *testing.T) {
 		pass: "example",
 	}
 
+	test2Args := args{
+		usr:  "example",
+		pass: "example",
+		ttl:  []int64{5},
+	}
+
 	testRequest := &Request{
 		Url:    "http://127.0.0.1:3000/test",
 		client: client,
@@ -281,9 +287,15 @@ func TestRequest_SetSecurityHeader(t *testing.T) {
 		want   *Request
 	}{
 		{
-			name:   "Test Set Security Header",
+			name:   "Test Set Security Header - Default ttl",
 			fields: testFields,
 			args:   testArgs,
+			want:   testRequest,
+		},
+		{
+			name:   "Test Set Security Header - set ttl",
+			fields: testFields,
+			args:   test2Args,
 			want:   testRequest,
 		},
 	}
@@ -403,17 +415,17 @@ func TestRequest_SetSoapType(t *testing.T) {
 	testFields := fields{
 		Url:      "http://127.0.0.1:3000/test",
 		client:   client,
-		SoapType: "http://www.ibsplc.com/iloyal/member/memberprofiledetail/type/",
+		SoapType: "http://www.example.com/example/member/detail/type/",
 	}
 
 	testArgs := args{
-		sType: "http://www.ibsplc.com/iloyal/member/memberprofiledetail/type/",
+		sType: "http://www.example.com/example/member/detail/type/",
 	}
 
 	testRequest := &Request{
 		Url:      "http://127.0.0.1:3000/test",
 		client:   client,
-		SoapType: "http://www.ibsplc.com/iloyal/member/memberprofiledetail/type/",
+		SoapType: "http://www.example.com/example/member/detail/type/",
 	}
 
 	tests := []struct {

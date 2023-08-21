@@ -3,7 +3,7 @@ package xmlsvcwrapper
 import (
 	"bytes"
 	"encoding/xml"
-	"io/ioutil"
+	"io"
 	"log"
 	"net/http"
 )
@@ -33,7 +33,7 @@ func (r *Request) send() (*Response, error) {
 		RawResponse: resp,
 	}
 
-	rawResp, err := ioutil.ReadAll(resp.Body)
+	rawResp, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return nil, err
 	}
