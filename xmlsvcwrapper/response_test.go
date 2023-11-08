@@ -159,3 +159,62 @@ func TestResponse_StatusCode(t *testing.T) {
 		})
 	}
 }
+
+func TestResponse_PayloadRequest(t *testing.T) {
+	type fields struct {
+		Request         *Request
+		RawResponse     *http.Response
+		payloadResponse []byte
+	}
+
+	headers := http.Header{}
+	headers.Set("Content-Type", "text/xml; charset=utf-8")
+
+	client := New()
+
+	request := `<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" >
+					   <soapenv:Header/>
+					   <soapenv:Body>
+						  <Response>
+							 <string>Hello World!</string>
+						  </Response>
+					   </soapenv:Body>
+					</soapenv:Envelope>`
+
+	testRequest := &Request{
+		Url:            "http://127.0.0.1:3000/test",
+		Header:         headers,
+		client:         client,
+		payloadRequest: []byte(request),
+	}
+
+	testFields := fields{
+		Request:         testRequest,
+		RawResponse:     &http.Response{},
+		payloadResponse: nil,
+	}
+
+	tests := []struct {
+		name   string
+		fields fields
+		want   []byte
+	}{
+		{
+			name:   "Test PayloadRequest",
+			fields: testFields,
+			want:   []byte(request),
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			r := &Response{
+				Request:         tt.fields.Request,
+				RawResponse:     tt.fields.RawResponse,
+				payloadResponse: tt.fields.payloadResponse,
+			}
+			if got := r.PayloadRequest(); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("PayloadRequest() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}

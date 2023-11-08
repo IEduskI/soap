@@ -17,6 +17,11 @@ func (r *Response) PayloadResponse() []byte {
 	return r.payloadResponse
 }
 
+// PayloadRequest function returns HTTP request as []byte array.
+func (r *Response) PayloadRequest() []byte {
+	return r.Request.payloadRequest
+}
+
 // StatusCode method returns the HTTP status code for the executed request.
 //
 //	Example: 200

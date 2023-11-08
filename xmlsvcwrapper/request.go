@@ -1,11 +1,15 @@
 package xmlsvcwrapper
 
-import "net/http"
+import (
+	"context"
+	"net/http"
+)
 
 type Request struct {
 	Url            string
 	Header         http.Header
 	client         *Client
+	Ctx            context.Context
 	SoapEnv        string
 	SoapType       string
 	BodyType       string
@@ -26,6 +30,20 @@ type Request struct {
 //		SetUrl("http://localhost/lm-ws/lmservices/MemberProfileDetailsService")
 func (r *Request) SetUrl(url string) *Request {
 	r.Url = url
+	return r
+}
+
+// SetContext function is to set a context field and its value in the current request.
+//
+// For Example:
+//
+//	ctx := r.Context()
+//	client.R().
+//		SetContext(ctx)
+//
+// Note: "r.Context()" is the context of the current request
+func (r *Request) SetContext(ctx context.Context) *Request {
+	r.Ctx = ctx
 	return r
 }
 
@@ -74,7 +92,7 @@ func (r *Request) SetBodyContent(content string) *Request {
 //
 //	client.R().
 //		SetHeader("Content-Type", "text/xml; charset=utf-8").
-//		SetHeader("Accept", "text/xml; charset=utf-8")
+//		SetHeader("Accept", "text/xml; charset=utf-8").
 //		SetHeader("SOAPAction", "http://mywebservice.com/km/add/action")
 func (r *Request) SetHeader(header, value string) *Request {
 	r.Header.Set(header, value)

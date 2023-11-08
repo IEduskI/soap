@@ -186,3 +186,62 @@ func Test_createTransport(t *testing.T) {
 		})
 	}
 }
+
+func TestClient_SetTransport(t *testing.T) {
+	type fields struct {
+		httpClient *http.Client
+	}
+	type args struct {
+		transport *http.Transport
+	}
+
+	httpClient := &http.Client{
+		Transport: createTransport(nil),
+	}
+
+	dialer := &net.Dialer{
+		Timeout:   30 * time.Second,
+		KeepAlive: 30 * time.Second,
+		DualStack: true,
+	}
+	httpTransport := &http.Transport{
+		Proxy:                 http.ProxyFromEnvironment,
+		DialContext:           dialer.DialContext,
+		MaxIdleConns:          100,
+		IdleConnTimeout:       90 * time.Second,
+		TLSHandshakeTimeout:   10 * time.Second,
+		ExpectContinueTimeout: 1 * time.Second,
+		MaxIdleConnsPerHost:   runtime.GOMAXPROCS(0) + 1,
+	}
+	argsField := args{
+		transport: httpTransport,
+	}
+
+	want := &Client{
+		httpClient: httpClient,
+	}
+
+	tests := []struct {
+		name   string
+		fields fields
+		args   args
+		want   *Client
+	}{
+		{
+			name:   "Test SetTransport()",
+			fields: fields{httpClient: httpClient},
+			args:   argsField,
+			want:   want,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			c := &Client{
+				httpClient: tt.fields.httpClient,
+			}
+			if got := c.SetTransport(tt.args.transport); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("SetTransport() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}

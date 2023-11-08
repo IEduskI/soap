@@ -3,6 +3,7 @@ package xmlsvcwrapper
 import (
 	"bytes"
 	"encoding/xml"
+	"fmt"
 	"io"
 	"log"
 	"net/http"
@@ -19,11 +20,17 @@ func (r *Request) send() (*Response, error) {
 
 	//headers
 	req.Header = r.Header
-	req.Close = true
 
+	if r.Ctx != nil {
+		req = req.WithContext(r.Ctx)
+	} else {
+		log.Print("Warning: is higly recommended set the request context")
+	}
+
+	//req.Close = true
 	resp, err := r.client.httpClient.Do(req)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("request sent: %s, error: %w", string(r.payloadRequest), err)
 	}
 
 	defer resp.Body.Close()

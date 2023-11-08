@@ -1,6 +1,7 @@
 package xmlsvcwrapper
 
 import (
+	"context"
 	"net/http"
 	"reflect"
 	"testing"
@@ -287,7 +288,7 @@ func TestRequest_SetSecurityHeader(t *testing.T) {
 		want   *Request
 	}{
 		{
-			name:   "Test Set Security Header - Default ttl",
+			name:   "Test Set Security Header",
 			fields: testFields,
 			args:   testArgs,
 			want:   testRequest,
@@ -415,17 +416,17 @@ func TestRequest_SetSoapType(t *testing.T) {
 	testFields := fields{
 		Url:      "http://127.0.0.1:3000/test",
 		client:   client,
-		SoapType: "http://www.example.com/example/member/detail/type/",
+		SoapType: "http://www.ibsplc.com/iloyal/member/memberprofiledetail/type/",
 	}
 
 	testArgs := args{
-		sType: "http://www.example.com/example/member/detail/type/",
+		sType: "http://www.ibsplc.com/iloyal/member/memberprofiledetail/type/",
 	}
 
 	testRequest := &Request{
 		Url:      "http://127.0.0.1:3000/test",
 		client:   client,
-		SoapType: "http://www.example.com/example/member/detail/type/",
+		SoapType: "http://www.ibsplc.com/iloyal/member/memberprofiledetail/type/",
 	}
 
 	tests := []struct {
@@ -525,6 +526,76 @@ func TestRequest_SetUrl(t *testing.T) {
 			}
 			if got := r.SetUrl(tt.args.url); !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("SetUrl() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestRequest_SetContext(t *testing.T) {
+	type fields struct {
+		Url            string
+		Header         http.Header
+		client         *Client
+		Ctx            context.Context
+		SoapEnv        string
+		SoapType       string
+		BodyType       string
+		BodyContent    string
+		payloadRequest []byte
+		SecurityHeader struct {
+			UserName   string
+			Password   string
+			TimeToLive int64
+		}
+	}
+	type args struct {
+		ctx context.Context
+	}
+
+	client := New()
+	ctx := context.Background()
+
+	testFields := fields{
+		Url:    "http://127.0.0.1:3000/test",
+		client: client,
+		Ctx:    ctx,
+	}
+
+	testRequest := &Request{
+		Url:    "http://127.0.0.1:3000/test",
+		client: client,
+		Ctx:    ctx,
+	}
+
+	tests := []struct {
+		name   string
+		fields fields
+		args   args
+		want   *Request
+	}{
+		{
+			name:   "Test SetContext()",
+			fields: testFields,
+			args:   args{ctx: ctx},
+			want:   testRequest,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			r := &Request{
+				Url:            tt.fields.Url,
+				Header:         tt.fields.Header,
+				client:         tt.fields.client,
+				Ctx:            tt.fields.Ctx,
+				SoapEnv:        tt.fields.SoapEnv,
+				SoapType:       tt.fields.SoapType,
+				BodyType:       tt.fields.BodyType,
+				BodyContent:    tt.fields.BodyContent,
+				payloadRequest: tt.fields.payloadRequest,
+				SecurityHeader: tt.fields.SecurityHeader,
+			}
+			if got := r.SetContext(tt.args.ctx); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("SetContext() = %v, want %v", got, tt.want)
 			}
 		})
 	}

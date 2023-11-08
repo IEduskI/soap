@@ -33,11 +33,34 @@ func (c *Client) R() *Request {
 	}
 }
 
-// SetTimeOut method sets timeout for request raised from client.
+// SetTimeOut function sets timeout for request raised from client.
 //
 //	client.SetTimeout(time.Duration(1 * time.Second))
 func (c *Client) SetTimeOut(timeout time.Duration) *Client {
 	c.httpClient.Timeout = timeout
+	return c
+}
+
+// SetTransport function sets custom transport.
+//
+//	 dialer := &net.Dialer{
+//			Timeout:   30 * time.Second,
+//			KeepAlive: 30 * time.Second,
+//			DualStack: true,
+//		}
+//		transport := &http.Transport{
+//			Proxy:                 http.ProxyFromEnvironment,
+//			DialContext:           dialer.DialContext,
+//			MaxIdleConns:          100,
+//			IdleConnTimeout:       90 * time.Second,
+//			TLSHandshakeTimeout:   10 * time.Second,
+//			ExpectContinueTimeout: 1 * time.Second,
+//			MaxIdleConnsPerHost:   runtime.GOMAXPROCS(0) + 1,
+//		}
+//
+//		client.SetTransport(transport)
+func (c *Client) SetTransport(transport *http.Transport) *Client {
+	c.httpClient.Transport = transport
 	return c
 }
 
@@ -50,7 +73,6 @@ func createTransport(httpTransport *http.Transport) *http.Transport {
 	dialer := &net.Dialer{
 		Timeout:   30 * time.Second,
 		KeepAlive: 30 * time.Second,
-		DualStack: true,
 	}
 	return &http.Transport{
 		Proxy:                 http.ProxyFromEnvironment,
