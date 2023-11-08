@@ -5,14 +5,13 @@ import (
 	"encoding/xml"
 	"fmt"
 	"io"
-	"log"
 	"net/http"
 )
 
 // send function execute the http request with the provided information from Request instance
 func (r *Request) send() (*Response, error) {
 
-	req, err := http.NewRequest(http.MethodPost, r.Url, bytes.NewReader(r.payloadRequest))
+	req, err := http.NewRequestWithContext(r.Ctx, http.MethodPost, r.Url, bytes.NewReader(r.payloadRequest))
 	if err != nil {
 		return nil, fmt.Errorf("failed to create request: %w", err)
 	}
@@ -20,11 +19,11 @@ func (r *Request) send() (*Response, error) {
 	//headers
 	req.Header = r.Header
 
-	if r.Ctx != nil {
+	/*if r.Ctx != nil {
 		req = req.WithContext(r.Ctx)
 	} else {
 		log.Print("Warning: is higly recommended set the request context")
-	}
+	}*/
 
 	req.Close = true
 	resp, err := r.client.httpClient.Do(req)
