@@ -14,8 +14,7 @@ func (r *Request) send() (*Response, error) {
 
 	req, err := http.NewRequest(http.MethodPost, r.Url, bytes.NewReader(r.payloadRequest))
 	if err != nil {
-		log.Fatalf("failed to create request %s", err)
-		return nil, err
+		return nil, fmt.Errorf("failed to create request: %w", err)
 	}
 
 	//headers
@@ -27,7 +26,7 @@ func (r *Request) send() (*Response, error) {
 		log.Print("Warning: is higly recommended set the request context")
 	}
 
-	//req.Close = true
+	req.Close = true
 	resp, err := r.client.httpClient.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("request sent: %s, error: %w", string(r.payloadRequest), err)
@@ -42,7 +41,7 @@ func (r *Request) send() (*Response, error) {
 
 	rawResp, err := io.ReadAll(resp.Body)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("error reading response, request sent: %s, error: %w", string(r.payloadRequest), err)
 	}
 
 	respContent := ContentResponse{}
