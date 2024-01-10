@@ -38,13 +38,13 @@ type Header struct {
 }
 
 type UsernameToken struct {
-	XMLName  xml.Name `xml:"wsse:UsernameToken,omitempty,omitempty"`
-	ID       string   `xml:"wsu:Id,attr,omitempty,omitempty"`
-	Wsu      string   `xml:"xmlns:wsu,attr,omitempty,omitempty"`
-	Username string   `xml:"wsse:Username,omitempty,omitempty"`
-	Password Password `xml:"wsse:Password,omitempty,omitempty"`
-	Nonce    string   `xml:"wsse:Nonce,omitempty,omitempty"`
-	Created  string   `xml:"wsu:Created,omitempty,omitempty"`
+	XMLName  xml.Name `xml:"wsse:UsernameToken,omitempty"`
+	ID       string   `xml:"wsu:Id,attr,omitempty"`
+	Wsu      string   `xml:"xmlns:wsu,attr,omitempty"`
+	Username string   `xml:"wsse:Username,omitempty"`
+	Password Password `xml:"wsse:Password,omitempty"`
+	Nonce    string   `xml:"wsse:Nonce,omitempty"`
+	Created  string   `xml:"wsu:Created,omitempty"`
 }
 
 type Password struct {
