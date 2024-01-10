@@ -11,7 +11,9 @@ func (r *Request) build() error {
 
 	serviceReq.SoapEnv = r.SoapEnv
 	serviceReq.Type = r.SoapType
-	serviceReq.Header = r.generateSecurityHeader()
+	if r.SecurityHeader.UserName != "" && r.SecurityHeader.Password != "" {
+		serviceReq.Header = r.generateSecurityHeader()
+	}
 	serviceReq.Body.Content.XMLName.Local = r.BodyType
 	serviceReq.Body.Content.RequestBody = r.BodyContent
 

@@ -8,7 +8,7 @@ type ServiceRequest struct {
 	Text    string   `xml:",chardata"`
 	SoapEnv string   `xml:"xmlns:soapenv,attr"`
 	Type    string   `xml:"xmlns:type,attr"`
-	Header  Security `xml:"soapenv:Header"`
+	Header  Security `xml:"soapenv:Header,omitempty"`
 	Body    Body     `xml:"soapenv:Body"`
 }
 
