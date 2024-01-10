@@ -24,7 +24,7 @@ func (r *Request) generateSecurityHeader() Security {
 	expiration := time.Now().UTC().Add(expirationDuration).Format(time.RFC3339)
 
 	// Create the Security struct
-	header := Header{
+	header := &Header{
 		MustUnderstand: "1",
 		Wsse:           "http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd",
 		Timestamp: Timestamp{
