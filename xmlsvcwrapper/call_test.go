@@ -1,6 +1,7 @@
 package xmlsvcwrapper
 
 import (
+	"context"
 	"net/http"
 	"reflect"
 	"testing"
@@ -11,6 +12,7 @@ func TestRequest_Call(t *testing.T) {
 		Url            string
 		Header         http.Header
 		client         *Client
+		Ctx            context.Context
 		SoapEnv        string
 		SoapType       string
 		BodyType       string
@@ -43,18 +45,21 @@ func TestRequest_Call(t *testing.T) {
 		Url:    "http://127.0.0.1:3000/test",
 		Header: headers,
 		client: client,
+		Ctx:    context.Background(),
 	}
 
 	test2Fields := fields{
 		Url:    "http://127.0.0.3000:3000/test",
 		Header: headers,
 		client: client,
+		Ctx:    context.Background(),
 	}
 
 	req := &Request{
 		Url:            "http://127.0.0.1:3000/test",
 		Header:         headers,
 		client:         client,
+		Ctx:            context.Background(),
 		payloadRequest: []byte(pRequest),
 	}
 
@@ -89,6 +94,7 @@ func TestRequest_Call(t *testing.T) {
 				Url:            tt.fields.Url,
 				Header:         tt.fields.Header,
 				client:         tt.fields.client,
+				Ctx:            tt.fields.Ctx,
 				SoapEnv:        tt.fields.SoapEnv,
 				SoapType:       tt.fields.SoapType,
 				BodyType:       tt.fields.BodyType,

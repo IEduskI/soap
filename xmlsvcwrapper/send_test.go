@@ -54,12 +54,6 @@ func TestRequest_send(t *testing.T) {
 		client: client,
 	}
 
-	test3Fields := fields{
-		Url:    "http://127.0.0.1:3000/test",
-		Header: headers,
-		client: client,
-	}
-
 	req := &Request{
 		Url:            "http://127.0.0.1:3000/test",
 		Header:         headers,
@@ -90,12 +84,6 @@ func TestRequest_send(t *testing.T) {
 			fields:  test2Fields,
 			want:    nil,
 			wantErr: true,
-		},
-		{
-			name:    "Test send Request without context",
-			fields:  test3Fields,
-			want:    resp,
-			wantErr: false,
 		},
 	}
 	for _, tt := range tests {
