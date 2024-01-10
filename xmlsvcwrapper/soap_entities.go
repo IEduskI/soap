@@ -8,7 +8,7 @@ type ServiceRequest struct {
 	Text    string   `xml:",chardata"`
 	SoapEnv string   `xml:"xmlns:soapenv,attr"`
 	Type    string   `xml:"xmlns:type,attr"`
-	Header  Security `xml:"soapenv:Header,omitempty"`
+	Header  Security `xml:"soapenv:Header"`
 	Body    Body     `xml:"soapenv:Body"`
 }
 
@@ -25,40 +25,40 @@ type RequestBody struct {
 
 // Security is the structure for the security header
 type Security struct {
-	Text   string `xml:",chardata"`
-	Header Header `xml:"wsse:Security"`
+	Text   string `xml:",chardata,omitempty"`
+	Header Header `xml:"wsse:Security,omitempty"`
 }
 
 type Header struct {
-	XMLName        xml.Name      `xml:"wsse:Security"`
-	MustUnderstand string        `xml:"soapenv:mustUnderstand,attr"`
-	Wsse           string        `xml:"xmlns:wsse,attr"`
-	Timestamp      Timestamp     `xml:"wsu:Timestamp"`
-	UsernameToken  UsernameToken `xml:"wsse:UsernameToken"`
+	XMLName        xml.Name      `xml:"wsse:Security,omitempty"`
+	MustUnderstand string        `xml:"soapenv:mustUnderstand,attr,omitempty"`
+	Wsse           string        `xml:"xmlns:wsse,attr,omitempty"`
+	Timestamp      Timestamp     `xml:"wsu:Timestamp,omitempty"`
+	UsernameToken  UsernameToken `xml:"wsse:UsernameToken,omitempty"`
 }
 
 type UsernameToken struct {
-	XMLName  xml.Name `xml:"wsse:UsernameToken"`
-	ID       string   `xml:"wsu:Id,attr"`
-	Wsu      string   `xml:"xmlns:wsu,attr"`
-	Username string   `xml:"wsse:Username"`
-	Password Password `xml:"wsse:Password"`
-	Nonce    string   `xml:"wsse:Nonce"`
-	Created  string   `xml:"wsu:Created"`
+	XMLName  xml.Name `xml:"wsse:UsernameToken,omitempty,omitempty"`
+	ID       string   `xml:"wsu:Id,attr,omitempty,omitempty"`
+	Wsu      string   `xml:"xmlns:wsu,attr,omitempty,omitempty"`
+	Username string   `xml:"wsse:Username,omitempty,omitempty"`
+	Password Password `xml:"wsse:Password,omitempty,omitempty"`
+	Nonce    string   `xml:"wsse:Nonce,omitempty,omitempty"`
+	Created  string   `xml:"wsu:Created,omitempty,omitempty"`
 }
 
 type Password struct {
-	XMLName        xml.Name `xml:"wsse:Password"`
-	Type           string   `xml:"Type,attr"`
-	PasswordDigest string   `xml:",chardata"`
+	XMLName        xml.Name `xml:"wsse:Password,omitempty"`
+	Type           string   `xml:"Type,attr,omitempty"`
+	PasswordDigest string   `xml:",chardata,omitempty"`
 }
 
 type Timestamp struct {
-	XMLName xml.Name `xml:"wsu:Timestamp"`
-	ID      string   `xml:"wsu:Id,attr"`
-	Wsu     string   `xml:"xmlns:wsu,attr"`
-	Created string   `xml:"wsu:Created"`
-	Expires string   `xml:"wsu:Expires"`
+	XMLName xml.Name `xml:"wsu:Timestamp,omitempty"`
+	ID      string   `xml:"wsu:Id,attr,omitempty"`
+	Wsu     string   `xml:"xmlns:wsu,attr,omitempty"`
+	Created string   `xml:"wsu:Created,omitempty"`
+	Expires string   `xml:"wsu:Expires,omitempty"`
 }
 
 // ContentResponse saving the response content
